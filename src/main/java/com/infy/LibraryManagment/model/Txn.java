@@ -2,13 +2,10 @@ package com.infy.LibraryManagment.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.catalina.LifecycleState;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -17,36 +14,27 @@ import java.util.List;
 @ToString
 @Builder
 @Entity
-public class Book {
+public class Txn {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(length = 30)
-    private String title;
-
-    @Column(length = 20, unique = true)
-    private String bookNo;
-
-    @Enumerated(value = EnumType.STRING)
-    private BookType bookType;
-
-    private Integer securityAmount;
-
-    @CreationTimestamp(source = SourceType.DB)
+    @CreationTimestamp
     private Data createdOn;
 
     @UpdateTimestamp
     private Date updateOn;
 
+    private String txnId;
+
+    @ManyToOne
+    @JoinColumn
+    private Book book;
+
     @ManyToOne
     @JoinColumn
     private User user;
 
-    @ManyToOne
-    @JoinColumn
-    private Author author;
-
-    @OneToMany(mappedBy = "book")
-    private List<Txn> txnList;
+    @Enumerated
+    private TxnStatus txnStatus;
 }

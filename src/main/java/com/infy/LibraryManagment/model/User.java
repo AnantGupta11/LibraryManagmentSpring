@@ -44,8 +44,11 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserStatus userStatus;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Book> bookList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Txn> txnList;
 }
 
 //User may have multiple books
