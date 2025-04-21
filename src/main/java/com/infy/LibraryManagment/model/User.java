@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -43,5 +44,8 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserStatus userStatus;
 
-
+    @OneToMany
+    private List<Book> bookList;
 }
+
+//User may have multiple books
