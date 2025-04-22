@@ -20,20 +20,22 @@ public class Txn {
     private Integer id;
 
     @CreationTimestamp
-    private Data createdOn;
+    private Date createdOn;
 
     @UpdateTimestamp
-    private Date updateOn;
+    private Date updatedOn;
 
     private String txnId;
 
-    @ManyToOne
-    @JoinColumn
-    private Book book;
+    private int settlementAmount;
 
     @ManyToOne
     @JoinColumn
     private User user;
+
+    @ManyToOne
+    @JoinColumn
+    private Book book;
 
     @Enumerated
     private TxnStatus txnStatus;

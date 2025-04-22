@@ -7,17 +7,18 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Builder
 @Entity
-public class Book {
+public class Book  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -34,10 +35,10 @@ public class Book {
     private Integer securityAmount;
 
     @CreationTimestamp(source = SourceType.DB)
-    private Data createdOn;
+    private Date createdOn;
 
     @UpdateTimestamp
-    private Date updateOn;
+    private Date updatedOn;
 
     @ManyToOne
     @JoinColumn
@@ -47,6 +48,6 @@ public class Book {
     @JoinColumn
     private Author author;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private List<Txn> txnList;
 }

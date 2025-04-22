@@ -1,5 +1,6 @@
 package com.infy.LibraryManagment.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,8 +12,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Builder
 @Entity
@@ -22,17 +23,19 @@ public class Author {
     private Integer id;
 
     @CreationTimestamp(source = SourceType.DB)
-    private Data createdOn;
+    private Date createdOn;
 
     @UpdateTimestamp
-    private Date updateOn;
+    private Date updatedOn;
+
+    @OneToMany(mappedBy = "author")
+//    @JsonIgnore
+    @JsonIgnoreProperties(value = "author")
+    private List<Book> bookList;
+
+    @Column(unique = true, length = 50, nullable = false)
+    private String email;
 
     @Column(length = 30)
     private String name;
-
-    @Column(unique = true, length = 40, nullable = false)
-    private String email;
-
-    @OneToMany(mappedBy = "author")
-    private List<Book> bookList;
 }
