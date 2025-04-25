@@ -18,8 +18,8 @@ import java.util.List;
 @Builder
 @Entity
 public class User  {
-    public UserType setUserType;
-    //public UserType setUserType;
+//    public UserType setUserType;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

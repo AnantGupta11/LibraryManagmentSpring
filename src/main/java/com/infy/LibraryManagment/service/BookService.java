@@ -1,12 +1,14 @@
 package com.infy.LibraryManagment.service;
 
 import com.infy.LibraryManagment.dto.BookRequest;
-import com.infy.LibraryManagment.model.Author;
-import com.infy.LibraryManagment.model.Book;
+import com.infy.LibraryManagment.model.*;
 import com.infy.LibraryManagment.repository.AuthorRepository;
 import com.infy.LibraryManagment.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BookService {
@@ -28,5 +30,28 @@ public class BookService {
         Book book = bookRequest.toBook();
         book.setAuthor(authorFromDB);
         return bookRepository.save(book);
+    }
+
+    public List<Book> filter(FilterType filterType, Operator operator, String value) {
+        switch (filterType){
+            case BOOK_TITLE:
+                switch (operator){
+                    case EQUALS :
+                        return bookRepository.findByTitle(value);
+
+                    case LIKE:
+                        return bookRepository.findByTitleContaining(value);
+
+                    default:
+                        return new ArrayList<>();
+                }
+            case BOOK_TYPE:
+                switch (operator){
+                    case EQUALS:
+                        return bookRepository.findByBookType(BookType.valueOf(value));
+                }
+
+                return new ArrayList<>();
+        }
     }
 }

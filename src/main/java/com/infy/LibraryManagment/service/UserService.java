@@ -14,7 +14,7 @@ public class UserService {
     private UserRepository userRepository;
     public User addStudent( UserRequest userRequest) {
         User user=userRequest.toUser();
-        user.setUserType= UserType.STUDENT;
+        user.setUserType(UserType.STUDENT);
         return userRepository.save(user);
     }
 
