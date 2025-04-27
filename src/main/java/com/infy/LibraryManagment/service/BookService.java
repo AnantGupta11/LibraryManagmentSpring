@@ -32,8 +32,8 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public List<Book> filter(FilterType filterType, Operator operator, String value) {
-        switch (filterType){
+    public List<Book> filter(BookFilterType bookFilterType, Operator operator, String value) {
+        switch (bookFilterType){
             case BOOK_TITLE:
                 switch (operator){
                     case EQUALS :
@@ -50,8 +50,18 @@ public class BookService {
                     case EQUALS:
                         return bookRepository.findByBookType(BookType.valueOf(value));
                 }
+            case BOOK_NO:
+                switch (operator){
+                    case EQUALS :
+                        return bookRepository.findByBookNo(value);
+                }
 
-                return new ArrayList<>();
+
         }
+        return new ArrayList<>();
+    }
+
+    public void updateBookData(Book bookFromDb) {
+        bookRepository.save(bookFromDb);
     }
 }

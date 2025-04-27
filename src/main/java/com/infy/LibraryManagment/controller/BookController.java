@@ -1,9 +1,8 @@
 package com.infy.LibraryManagment.controller;
 
-import ch.qos.logback.core.util.StringUtil;
 import com.infy.LibraryManagment.dto.BookRequest;
 import com.infy.LibraryManagment.model.Book;
-import com.infy.LibraryManagment.model.FilterType;
+import com.infy.LibraryManagment.model.BookFilterType;
 import com.infy.LibraryManagment.model.Operator;
 import com.infy.LibraryManagment.service.BookService;
 import jakarta.validation.Valid;
@@ -30,11 +29,11 @@ public class BookController {
     }
 
     @GetMapping("/filter")
-    public List<Book> filter(@RequestParam("filterBy")FilterType filterType,
+    public List<Book> filter(@RequestParam("filterBy") BookFilterType bookFilterType,
                              @RequestParam("operator")Operator operator,
                              @RequestParam("value") String value){
 
-        return bookService.filter(filterType,operator,value);
+        return bookService.filter(bookFilterType,operator,value);
 
     }
 
