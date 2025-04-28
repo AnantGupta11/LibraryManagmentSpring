@@ -6,6 +6,9 @@ import com.infy.LibraryManagment.model.User;
 import com.infy.LibraryManagment.model.UserFilterType;
 import com.infy.LibraryManagment.model.UserType;
 import com.infy.LibraryManagment.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.apache.commons.logging.Log;
@@ -21,6 +24,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     public User addStudent( UserRequest userRequest) {
         User user=userRequest.toUser();
@@ -44,7 +50,9 @@ public class UserService {
         }
 
         logger.info("query is :" + query.substring(0,query.length()-4));
-        return userRepository.findUserByNativeQuery(query.substring(0,query.length()-4).toString());
+        Query query1=em.createNativeQuery(query.substring(0,query.length()-4), User.class);
+        return  query1.getResultList();
+        //return userRepository.findUserByNativeQuery(query.substring(0,query.length()-4).toString());
     }
 
     public User getStudentByPhone(@NotBlank(message = "userPhoneNo should not be blank") String userPhoneNo) {

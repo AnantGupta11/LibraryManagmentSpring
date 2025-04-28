@@ -1,5 +1,6 @@
 package com.infy.LibraryManagment.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -56,7 +57,7 @@ public class User  {
     private List<Book> bookList;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    //@JsonIgnoreProperties(value = {"user", "book"})
+    @JsonIgnoreProperties(value = {"user", "book"})
     private List<Txn> txnList;
 
 //    @Override

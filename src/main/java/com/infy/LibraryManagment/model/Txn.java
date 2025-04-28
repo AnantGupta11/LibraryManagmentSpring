@@ -27,6 +27,8 @@ public class Txn {
 
     private String txnId;
 
+    private int fineAmount;
+
     private int settlementAmount;
 
     @ManyToOne
