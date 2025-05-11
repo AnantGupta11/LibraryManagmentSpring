@@ -18,13 +18,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/addStudent")
-    private User addStudent(@RequestBody  UserRequest userRequest){
+    private User addStudent(@RequestBody @Valid UserRequest userRequest){
         return userService.addStudent(userRequest);
     }
 
     @PostMapping("/addAdmin")
-    private User addAdmin(@RequestBody  UserRequest userRequest){
-        return null;
+    private User addAdmin(@RequestBody @Valid UserRequest userRequest){
+        return userService.addAdmin(userRequest);
     }
 
     @GetMapping("/filter")

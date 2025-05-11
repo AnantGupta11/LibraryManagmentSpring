@@ -5,6 +5,8 @@ import com.infy.LibraryManagment.model.UserStatus;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import static com.infy.LibraryManagment.model.User.*;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +25,9 @@ public class UserRequest {
     private String email;
     
     private String address;
+
+    @NotBlank(message = "password should not be blank")
+    private String password;
 
     public User toUser() {
         return User.

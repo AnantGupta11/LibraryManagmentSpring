@@ -14,6 +14,6 @@ public class LibraryManagmentApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		
+		System.out.println("My App is started!!");
 	}
 }

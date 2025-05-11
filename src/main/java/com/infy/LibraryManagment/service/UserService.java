@@ -1,10 +1,12 @@
 package com.infy.LibraryManagment.service;
 
 import com.infy.LibraryManagment.dto.UserRequest;
+import com.infy.LibraryManagment.exception.UserException;
 import com.infy.LibraryManagment.model.Operator;
 import com.infy.LibraryManagment.model.User;
 import com.infy.LibraryManagment.model.UserFilterType;
 import com.infy.LibraryManagment.model.UserType;
+import com.infy.LibraryManagment.repository.UserCacheRepository;
 import com.infy.LibraryManagment.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,22 +16,42 @@ import jakarta.validation.constraints.NotBlank;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private static final Log logger = LogFactory.getLog(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
+    @Autowired
+    UserCacheRepository userCacheRepository;
+
     @PersistenceContext
     private EntityManager em;
 
+    @Value("${student.authority}")
+    private String studentAuthority;
+
+    @Value("${admin.authority}")
+    private String adminAuthority;
+
     public User addStudent( UserRequest userRequest) {
         User user=userRequest.toUser();
+        user.setAuthorities(studentAuthority);
+        user.setPassword(encoder.encode(userRequest.getPassword()));
         user.setUserType(UserType.STUDENT);
         return userRepository.save(user);
     }
@@ -58,6 +80,31 @@ public class UserService {
     public User getStudentByPhone(@NotBlank(message = "userPhoneNo should not be blank") String userPhoneNo) {
         return userRepository.findByphoneNoAndUserType(userPhoneNo, UserType.STUDENT);
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        //load data from redis
+        // if user is present then get the data
+        User user=userCacheRepository.getUser(email);
+        if(user!=null){
+            return user;
+        }
+        user= userRepository.findByEmail(email);
+        if(user==null){
+             new UserException("User details are wrong");
+        }
+        userCacheRepository.setUser(email,user);
+        return user;
+    }
+
+    public User addAdmin(UserRequest userRequest) {
+        User user=userRequest.toUser();
+        user.setAuthorities(adminAuthority);
+        user.setPassword(encoder.encode(userRequest.getPassword()));
+        user.setUserType(UserType.ADMIN);
+        return userRepository.save(user);
+    }
+
 
 //    public User addAdmin(@Valid UserRequest userRequest) {
 //    }
